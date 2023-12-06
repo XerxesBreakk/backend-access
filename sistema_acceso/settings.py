@@ -154,7 +154,7 @@ DJOSER={
     #'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
     'SERIALIZERS': {
         #'user_create': 'accounts.serializers.UserCreateSerializer',
-        #'user': 'accounts.serializers.UserCreateSerializer',
+        'user': 'accounts.serializers.UserCustomSerializer',
         #'user_delete': 'djoser.serializers.UserDeleteSerializer',
     },
 }
@@ -167,7 +167,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
