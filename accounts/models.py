@@ -4,22 +4,22 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 class UserAccountManager(BaseUserManager):
     def create_user(self,username,email,first_name,password=None):
         if not username:
-            raise ValueError('Users must have an username.')
+            raise ValueError('El campo usuario es obligatorio.')
         if not email:
-            raise ValueError('Users must have an email address.')
+            raise ValueError('Los usuarios deben tener un correo.')
         email=self.normalize_email(email)
         user=self.model(username=username,email=email,first_name=first_name)
         user.set_password(password)
         user.save()
         return user
     
-    def create_superuser(self,username,email,first_name,last_name,password=None):
+    def create_superuser(self,username,email,first_name,password=None):
         if not username:
-            raise ValueError('Users must have an username.')
+            raise ValueError('El campo usuario es obligatorio.')
         if not email:
-            raise ValueError('Users must have an email address.')
+            raise ValueError('El campo usuario es obligatorio.')
         email=self.normalize_email(email)
-        user=self.model(username=username,email=email,first_name=first_name,last_name=last_name)
+        user=self.model(username=username,email=email,first_name=first_name)
         user.set_password(password)
         user.is_staff=True
         user.save()
@@ -27,7 +27,7 @@ class UserAccountManager(BaseUserManager):
         
 
 class UserAccount(AbstractBaseUser,PermissionsMixin):
-    username = models.CharField(max_length=255,unique=True)
+    username = models.CharField(max_length=255,verbose_name="usuario",unique=True)
     first_name= models.CharField(max_length=255)
     last_name= models.CharField(max_length=255)
     email= models.EmailField(max_length=255,unique=True)

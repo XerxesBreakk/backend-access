@@ -9,8 +9,9 @@ class UserCustomSerializer(UserSerializer):
         fields = tuple(UserAccount.REQUIRED_FIELDS) + (
             settings.USER_ID_FIELD,
             settings.LOGIN_FIELD,
+            'is_active','is_staff','last_name'
         )
-        read_only_fields = ['is_active',]
+        read_only_fields = ['is_active','is_staff','last_name']
 
     def update(self, instance, validated_data):
         email_field = get_user_email_field_name(UserAccount)
