@@ -21,7 +21,7 @@ class WorkOrder(models.Model):
     def clean_date(self):
         # Validación personalizada para la fecha
         if self.date < timezone.now():
-            raise ValidationError('La fecha no puede ser anterior a hoy.')
+            raise ValidationError('La fecha no puede ser anterior a la fecha actual.')
 
     def clean_approver(self):
         # Validación personalizada para user_1
