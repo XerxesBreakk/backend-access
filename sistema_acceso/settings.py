@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'djoser',
     'coreapi', #TODO delete when in production
     'accounts',
+    'work_orders',
 ]
 
 MIDDLEWARE = [
