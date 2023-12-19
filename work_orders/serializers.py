@@ -1,27 +1,31 @@
+from django.utils import timezone
 from rest_framework import serializers
 from .models import WorkOrder
 
 class WorkOrderSerializer(serializers.ModelSerializer):
+    applicant_username = serializers.ReadOnlyField(source='applicant.username')
     class Meta:
         model = WorkOrder
-        fields = ['id', 'date', 'duration', 'activity', 'company', 'capacity', 'pin', 'approver']
-        read_only_fields = ['pin', 'approver']
+        fields = ['id', 'date', 'duration', 'activity', 'company', 'capacity','applicant_username']
+        read_only_fields = ['applicant_username']
         
-        def create(self, validated_data):
-            # Al crear, eliminamos pin y approver del validated_data
-            pin = validated_data.pop('pin', None)
-            approver = validated_data.pop('approver', None)
+    def validate_date(self, value):
+        if value < timezone.now():
+            raise serializers.ValidationError('La fecha no puede ser anterior.')
+        return value
+    
+    def validate_capacity(self, value):
+        if value < 1:
+            raise serializers.ValidationError('La capacidad debe ser al menos 1.')
+        return value
+        
+class WorkOrderApproveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkOrder
+        fields = ['approver']
 
-            # Luego, llamamos al método create del modelo y obtenemos la instancia
-            instance = super().create(validated_data)
-
-            # Si pin o approver se proporcionaron, los establecemos ahora
-            if pin:
-                instance.pin = pin
-            if approver:
-                instance.approver = approver
-
-            # Guardamos la instancia actualizada
-            instance.save()
-
-            return instance
+    def validate_approver(self, value):
+        # Ensure that the user approving the order is a staff member
+        if not value.is_staff:
+            raise serializers.ValidationError("Solo administradores pueden aprobar ordenes de trabajo.")
+        return value

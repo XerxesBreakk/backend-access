@@ -12,7 +12,7 @@ class WorkOrder(models.Model):
     is_active = models.BooleanField(default=False)
     company = models.CharField(max_length=255)
     applicant = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='applicant')
-    approver = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='approver')
+    approver = models.ForeignKey(UserAccount, on_delete=models.CASCADE,null=True, blank=True, related_name='approver')
     pin = models.CharField(max_length=10,blank=True)
     
     def __str__(self):
