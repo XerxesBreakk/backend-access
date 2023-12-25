@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from accounts.models import UserAccount
 
+
 class WorkOrder(models.Model):
     date = models.DateTimeField()
     capacity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
@@ -27,3 +28,4 @@ class WorkOrder(models.Model):
         # Validación personalizada para user_1
         if not self.approver.is_staff:
             raise ValidationError('El usuario debe ser administrador.')
+        

@@ -6,8 +6,8 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     applicant_username = serializers.ReadOnlyField(source='applicant.username')
     class Meta:
         model = WorkOrder
-        fields = ['id', 'date', 'duration', 'activity', 'company', 'capacity','applicant_username']
-        read_only_fields = ['applicant_username']
+        fields = ['id', 'date', 'duration', 'activity', 'company', 'capacity','pin','is_active','applicant_username']
+        read_only_fields = ['is_active','pin','applicant_username']
         
     def validate_date(self, value):
         if value < timezone.now():
@@ -19,13 +19,5 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('La capacidad debe ser al menos 1.')
         return value
         
-class WorkOrderApproveSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WorkOrder
-        fields = ['approver']
-
-    def validate_approver(self, value):
-        # Ensure that the user approving the order is a staff member
-        if not value.is_staff:
-            raise serializers.ValidationError("Solo administradores pueden aprobar ordenes de trabajo.")
-        return value
+class WorkOrderApprovalSerializer(serializers.Serializer):
+    pass  # No need for additional fields for this case
